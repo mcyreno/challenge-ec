@@ -1,0 +1,10 @@
+# Ignore auto-generated files
+**.project
+**.classpath
+**.class
+**.settings/
+**.gradle/
+**/reports/
+**/bin/
+**/build/
+
