@@ -16,7 +16,6 @@ public class SettingsStartingEndingSteps {
 
 	@Before
 	public void beforeScenario() {
-//		DRIVER.get(SeleniumReadPropertyKeys.getUrlToHome());
 		DRIVER.manage().window().maximize();
 		DRIVER.manage().timeouts().implicitlyWait(getTimeOut(), TimeUnit.SECONDS);
 	}

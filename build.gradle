@@ -41,13 +41,32 @@ dependencies {
 	testCompile group: 'info.cukes', name: 'cucumber-junit', version:cucumberVersion	
 }
 
+tasks.withType(Test) {
+    testLogging {
+        events "passed", "skipped", "failed"
+        showExceptions true
+        exceptionFormat "short"
+        showCauses true
+        showStackTraces true
+
+        afterSuite { desc, result ->
+            if (!desc.parent) {
+                def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+                def startItem = '|  ', endItem = '  |'
+                def repeatLength = startItem.length() + output.length() + endItem.length()
+                println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
+            }
+        }
+    }
+}
+
 task setupCucumberTestWithGoogleChrome {
     description 'Create the Functional Tests properties and Chrome Driver, for Functional Test with BDD flow, but only work if run on project root folder.'
 
 	doLast {
 		def SeleniumPropertyKeysPath = new File( 'SeleniumDriver' )
 		
-		if ( (Os.isFamily(Os.FAMILY_WINDOWS)) && (!new File( '/SeleniumDriver/chromedriver.exe').exists()) ) {
+		if ( (Os.isFamily(Os.FAMILY_WINDOWS)) && (!new File( 'SeleniumDriver/chromedriver.exe').exists()) ) {
 			println "Create Configuration for Windows to use the Google Chrome Driver"
 			download {
 				src 'https://chromedriver.storage.googleapis.com/2.42/chromedriver_win32.zip'
@@ -61,7 +80,7 @@ task setupCucumberTestWithGoogleChrome {
 			}
 			delete 'SeleniumDriver/chromedriver_win32.zip'
 
-		} else if ( (Os.isFamily(Os.FAMILY_MAC)) && (!new File( '/SeleniumDriver/chromedriver').exists()) ) {
+		} else if ( (Os.isFamily(Os.FAMILY_MAC)) && (!new File( 'SeleniumDriver/chromedriver').exists()) ) {
 			println "Create Configuration for Mac to use the Google Chrome Driver"
 			download {
 				src 'https://chromedriver.storage.googleapis.com/2.42/chromedriver_mac64.zip'
@@ -75,7 +94,7 @@ task setupCucumberTestWithGoogleChrome {
 			}
 			delete 'SeleniumDriver/chromedriver_mac64.zip'
 
-		} else if ( (Os.isFamily(Os.FAMILY_UNIX)) && (!new File( '/SeleniumDriver/chromedriver').exists()) ) {
+		} else if ( (Os.isFamily(Os.FAMILY_UNIX)) && (!new File( 'SeleniumDriver/chromedriver').exists()) ) {
 			println "Create Configuration for Unix to use the Google Chrome Driver"
 			download {
 				src 'https://chromedriver.storage.googleapis.com/2.42/chromedriver_linux64.zip'

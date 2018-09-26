@@ -22,4 +22,9 @@ public class CommonMethods {
 		DRIVER.findElement(locator).clear();
 		DRIVER.findElement(locator).sendKeys(text);
 	}
+	
+	public String getTextOnElement(By locator) {
+		waitElementBeVisible(locator);
+		return DRIVER.findElement(locator).getText();
+	}
 }
